@@ -2,11 +2,16 @@
 import streamlit as st
 import openai
 import os
-from dotenv import load_dotenv
 
-# Load API key
-load_dotenv()
-client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Use st.secrets in the cloud, .env locally
+if "OPENAI_API_KEY" in st.secrets:
+    api_key = st.secrets["OPENAI_API_KEY"]
+else:
+    from dotenv import load_dotenv
+    load_dotenv()
+    api_key = os.getenv("OPENAI_API_KEY")
+
+client = openai.OpenAI(api_key=api_key)
 
 # Page settings
 st.set_page_config(page_title="GPT-4o Chat", layout="centered")
